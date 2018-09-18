@@ -202,11 +202,11 @@ class Host(object):
                 except WindowsError:
                     rc = -1
                 # End try
-                sshCmd = 'pbs_tmrsh' if rc > -1 else BASE_RSH
+                sshCmd = ['pbs_tmrsh', ] if rc > -1 else BASE_RSH
             else:
                 sshCmd = BASE_SSH
             # End if
-            
+
             if tunnelPorts is not None:
                 sshCmd += [
                     '-R {0}:127.0.0.1:{0}'.format(tunnelPorts[0]),
