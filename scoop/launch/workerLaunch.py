@@ -196,7 +196,17 @@ class Host(object):
         else:
             # Launching remotely
             BASE_SSH[0] = self.ssh_executable
-            sshCmd = BASE_SSH if not self.rsh else BASE_RSH
+            if self.rsh:
+                try:
+                    rc = subprocess.call(['which', 'pbs_tmrsh'])
+                except WindowsError:
+                    rc = -1
+                # End try
+                sshCmd = 'pbs_tmrsh' if rc > -1 else BASE_RSH
+            else:
+                sshCmd = BASE_SSH
+            # End if
+            
             if tunnelPorts is not None:
                 sshCmd += [
                     '-R {0}:127.0.0.1:{0}'.format(tunnelPorts[0]),
